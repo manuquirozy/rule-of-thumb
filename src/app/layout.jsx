@@ -1,11 +1,8 @@
-import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import searchIcon from '../../public/img/search.svg';
 import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
-import popeFrancisImage from '/public/img/pope-francis.png';
-import bgPeopleImage from '/public/img/bg-people.png';
 import './globals.css';
 
 const lato = Lato({
@@ -13,15 +10,13 @@ const lato = Lato({
   subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Rule of Thumb',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang='en'>
       <body className={lato.className}>
@@ -57,7 +52,7 @@ export default function RootLayout({
         <header className='hero'>
           <div className='hero__background'>
             <Image
-              src={popeFrancisImage}
+              src='/img/pope-francis.png'
               alt='Pope Francis'
               sizes='100vw'
               className='object-cover w-full h-full'
@@ -87,13 +82,13 @@ export default function RootLayout({
                     More information
                   </a>
                 </p>
-                <p className='featured-card__cta block mx-0 my-4'>What’s Your Veredict?</p>
+                <p className='featured-card__cta block mx-0 my-4 tablet:mb-8'>What’s Your Veredict?</p>
                 <div className='featured-card__buttons'>
                   <button className='icon-button grid place-items-center' aria-label='thumbs up'>
-                    <Image src={thumbsUpIcon} alt='thumbs up' width={200} height={200} />
+                    <Image src={thumbsUpIcon} alt='thumbs up' width={17.5} height={17.5} />
                   </button>
                   <button className='icon-button grid place-items-center' aria-label='thumbs down'>
-                    <Image src={thumbsDownIcon} alt='thumbs down' width={200} height={200} />
+                    <Image src={thumbsDownIcon} alt='thumbs down' width={17.5} height={17.5} />
                   </button>
                 </div>
               </div>
@@ -131,7 +126,7 @@ export default function RootLayout({
           </aside>
           <main role='main'>{children}</main>
           <aside className='banner banner-bottom' role='doc-tip' aria-label='Submit a name'>
-            <Image className='banner__background' src={bgPeopleImage} alt='' width={200} height={200} role='none' />
+            <Image className='banner__background' src='/img/bg-people.png' alt='' width={200} height={200} role='none' />
             <div className='banner__left'>
               <h2 className='banner__heading'>Is there anyone else you would want us to add?</h2>
             </div>
@@ -146,7 +141,7 @@ export default function RootLayout({
                 <li>
                   <a href='#'>Terms and Conditions</a>
                 </li>
-                <li>
+                <li className='my-6'>
                   <a href='#'>Privacy Policy</a>
                 </li>
                 <li>
@@ -157,7 +152,7 @@ export default function RootLayout({
             <div className='footer__social'>
               <span>Follow us</span>
               <ul>
-                <li>
+                <li className='mr-4'>
                   <a href='#'>
                     <svg width='24' height='24' xmlns='http://www.w3.org/2000/svg'>
                       <path
@@ -168,7 +163,7 @@ export default function RootLayout({
                     </svg>
                   </a>
                 </li>
-                <li>
+                <li className='mr-0'>
                   <a href='#'>
                     <svg width='26' height='23' xmlns='http://www.w3.org/2000/svg'>
                       <path
