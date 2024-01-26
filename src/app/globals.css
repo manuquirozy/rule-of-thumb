@@ -36,7 +36,7 @@ body {
   position: relative;
 }
 
-#card-list::-webkit-scrollbar{
+#card-list::-webkit-scrollbar {
   display: none;
 }
 
@@ -65,7 +65,7 @@ hr[role='separator'] {
 .nav {
   box-sizing: content-box;
   position: fixed;
-  z-index: 2;
+  z-index: 30;
   top: 0;
   display: flex;
   width: calc(100vw - 2rem);

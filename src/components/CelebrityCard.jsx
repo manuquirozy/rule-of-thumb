@@ -5,7 +5,7 @@ import Gauge from './Gauge';
 import clsx from 'clsx';
 import VoteButtons from './VoteButtons';
 
-export default function CelebrityCard({ celebrity, display }) {
+export default function CelebrityCard({ celebrity, display, updateVoteCount }) {
   return (
     <div
       className={clsx(
@@ -36,7 +36,7 @@ export default function CelebrityCard({ celebrity, display }) {
             { 'pr-[12px] desktop:pr-[14px]': display === 'List' }
           )}
         >
-          {celebrity.votes.positive > celebrity.votes.negative ? (
+          {celebrity.votes.positive >= celebrity.votes.negative ? (
             <div
               className={clsx('grid place-items-center w-[30px] h-[30px] bg-[#3CBBB4] bg-opacity-80 absolute left-0', {
                 'top-0 desktop:w-[45px] desktop:h-[45px]': display === 'List',
@@ -85,7 +85,7 @@ export default function CelebrityCard({ celebrity, display }) {
             </div>
             <p className='text-[1.25rem] tablet:text-[1rem] line-clamp-2 h-13 tablet:h-10 desktop:h-8'>{celebrity.description}</p>
           </div>
-          <VoteButtons category={celebrity.category} lastUpdated={celebrity.lastUpdated} display={display} />
+          <VoteButtons celebrity={celebrity} display={display} updateVoteCount={updateVoteCount} />
         </div>
         <Gauge votes={celebrity.votes} display={display} />
       </div>

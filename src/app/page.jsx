@@ -13,10 +13,23 @@ export default function Home() {
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
-      setDisplay("Grid");
+      setDisplay('Grid');
     } else {
       setIsMobile(false);
     }
+  };
+
+  const updateVoteCount = (updatedCelebrity) => {
+    const celebrityArrayCopy = [...celebrityArray];
+    const celebrityIndex = celebrityArrayCopy.findIndex((element) => element.name === updatedCelebrity.name);
+    celebrityArrayCopy[celebrityIndex] = updatedCelebrity;
+    setCelebrityArray(celebrityArrayCopy);
+    localStorage.setItem('data', JSON.stringify(celebrityArrayCopy));
+  };
+
+  const updateDisplay = (updatedDisplay) => {
+    setDisplay(updatedDisplay);
+    localStorage.setItem('display', JSON.stringify(updatedDisplay));
   };
 
   useEffect(() => {
@@ -25,6 +38,15 @@ export default function Home() {
       setCelebrityArray(data);
     } else {
       localStorage.setItem('data', JSON.stringify(initialData.data));
+    }
+  }, []);
+
+  useEffect(() => {
+    const displayData = JSON.parse(localStorage.getItem('display'));
+    if (displayData) {
+      setDisplay(displayData);
+    } else {
+      localStorage.setItem('display', JSON.stringify('Grid'));
     }
   }, []);
 
@@ -38,12 +60,14 @@ export default function Home() {
     <div>
       <div className='mb-8 flex justify-between items-center'>
         <div className='text-[2rem] font-light text-[#464646]'>Previous Rulings</div>
-        {!isMobile && <Dropdown toggleDisplay={setDisplay} display={display} />}
+        {!isMobile && <Dropdown toggleDisplay={updateDisplay} display={display} />}
       </div>
       <div className='flex flex-row flex-nowrap tablet:flex-wrap tablet:justify-center overflow-scroll gap-4 tablet:gap-6' id='card-list'>
         {celebrityArray.length > 0
-          ? celebrityArray.map((celebrity) => <CelebrityCard celebrity={celebrity} display={display} key={celebrity.name} />)
-          : 'No available information'}
+          ? celebrityArray.map((celebrity) => (
+              <CelebrityCard celebrity={celebrity} display={display} updateVoteCount={updateVoteCount} key={celebrity.name} />
+            ))
+          : 'Loading...'}
       </div>
     </div>
   );

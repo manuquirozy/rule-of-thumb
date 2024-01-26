@@ -5,7 +5,8 @@ import thumbsDownIcon from '/public/img/thumbs-down.svg';
 import { intervalToDuration } from 'date-fns';
 import clsx from 'clsx';
 
-export default function VoteButtons({ category, lastUpdated, display }) {
+export default function VoteButtons({ celebrity, display, updateVoteCount }) {
+  const { category, lastUpdated, name } = celebrity;
   const [vote, setVote] = useState(undefined);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -31,7 +32,12 @@ export default function VoteButtons({ category, lastUpdated, display }) {
 
   const onSubmit = () => {
     if (!isSubmitted) {
-      console.log(vote);
+      if (vote === 'thumbs up') {
+        celebrity.votes.positive++;
+      } else {
+        celebrity.votes.negative++;
+      }
+      updateVoteCount(celebrity);
       setVote(undefined);
     }
 
