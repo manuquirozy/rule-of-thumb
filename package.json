@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "next": "14.1.0",
     "next-google-fonts": "^2.2.0",

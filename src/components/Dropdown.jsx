@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import triangleIcon from '/public/img/triangle.svg';
 
-export default function Dropdown() {
+export default function Dropdown({toggleDisplay, display}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [display, setDisplay] = useState('List');
-
-  console.log(display);
 
   const toggle = () => {
     setIsOpen((prevState) => !prevState);
   };
 
-  const onSelect = (event) => {
-    setDisplay(event.target.innerHTML)
+  const handleSelect = (event) => {
+    toggleDisplay(event.target.innerHTML)
     toggle();
   }
 
@@ -24,10 +21,10 @@ export default function Dropdown() {
           <Image src={triangleIcon} alt='toggle dropdown' width={10.5} height={7} className='mx-2' />
         </button>
         <div className={`${isOpen ? 'max-h-16' : 'max-h-0 invisible'} absolute transition-all duration-500 ease-in-out overflow-hidden`}>
-          <button onClick={onSelect} className='h-8 w-36 bg-white box-border border-x-2 border-black grid place-content-center'>
+          <button onClick={handleSelect} className='h-8 w-36 bg-white box-border border-x-2 border-black grid place-content-center'>
             List
           </button>
-          <button onClick={onSelect} className='h-8 w-36 bg-white box-border border-2 border-black grid place-content-center'>
+          <button onClick={handleSelect} className='h-8 w-36 bg-white box-border border-2 border-black grid place-content-center'>
             Grid
           </button>
         </div>
