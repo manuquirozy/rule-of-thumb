@@ -67,7 +67,13 @@ export default function CelebrityCard({ celebrity, display }) {
               />
             </div>
           )}
-          <div className={clsx('mb-4 tablet:mb-2', { 'pl-[calc(10.25rem-8px)] desktop:pl-[calc(9.5rem-8px)] pr-8': display === 'List' })}>
+          <div
+            className={clsx(
+              'tablet:mb-2',
+              { 'mb-4 pl-[calc(10.25rem-8px)] desktop:pl-[calc(9.5rem-8px)] pr-8': display === 'List' },
+              { 'mb-5': display === 'Grid' }
+            )}
+          >
             <div
               className={clsx(
                 'text-[2.5rem] tablet:text-[2.15rem] leading-[3rem] tablet:leading-[2.5rem]',

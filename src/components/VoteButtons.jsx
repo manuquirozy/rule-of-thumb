@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
@@ -5,6 +6,9 @@ import { intervalToDuration } from 'date-fns';
 import clsx from 'clsx';
 
 export default function VoteButtons({ category, lastUpdated, display }) {
+  const [vote, setVote] = useState(undefined);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const categoryCapitalized = category.charAt(0).toUpperCase() + category.slice(1);
 
   const diff = intervalToDuration({
@@ -17,13 +21,37 @@ export default function VoteButtons({ category, lastUpdated, display }) {
 
   const outputString = `${value} ${value === 1 ? greatestPeriod?.slice(0, -1) : greatestPeriod} ago in ${categoryCapitalized}`;
 
+  const handleClick = (event) => {
+    if (event.target.alt === vote) {
+      setVote(undefined);
+    } else {
+      setVote(event.target.alt);
+    }
+  };
+
+  const onSubmit = () => {
+    if (!isSubmitted) {
+      console.log(vote);
+      setVote(undefined);
+    }
+
+    setIsSubmitted((prevState) => !prevState);
+  };
+
   return (
     <div className={clsx('flex flex-col items-end gap-[12px]', { 'pt-[8px]': display === 'List' })}>
-      <span className='desktop:text-[12px]'>{outputString}</span>
+      <span className='desktop:text-[12px] line-clamp-1'>{isSubmitted ? 'Thank you for voting!' : outputString}</span>
       <div className='flex items-center gap-[12px] desktop:gap-3'>
         <button
-          className={clsx('grid place-items-center w-[30px] h-[30px]', { 'desktop:w-[45px] desktop:h-[45px]': display === 'List' })}
+          onClick={handleClick}
+          className={clsx(
+            'grid place-items-center w-[30px] h-[30px]',
+            { 'desktop:w-[45px] desktop:h-[45px]': display === 'List' },
+            { 'border border-white': vote === 'thumbs up' },
+            { invisible: isSubmitted }
+          )}
           aria-label='thumbs up'
+          disabled={isSubmitted}
         >
           <Image
             src={thumbsUpIcon}
@@ -34,8 +62,15 @@ export default function VoteButtons({ category, lastUpdated, display }) {
           />
         </button>
         <button
-          className={clsx('grid place-items-center w-[30px] h-[30px]', { 'desktop:w-[45px] desktop:h-[45px]': display === 'List' })}
+          onClick={handleClick}
+          className={clsx(
+            'grid place-items-center w-[30px] h-[30px]',
+            { 'desktop:w-[45px] desktop:h-[45px]': display === 'List' },
+            { 'border border-white': vote === 'thumbs down' },
+            { invisible: isSubmitted }
+          )}
           aria-label='thumbs down'
+          disabled={isSubmitted}
         >
           <Image
             src={thumbsDownIcon}
@@ -45,8 +80,16 @@ export default function VoteButtons({ category, lastUpdated, display }) {
             className={display === 'List' && 'desktop:w-[24px] desktop:h-[24px]'}
           />
         </button>
-        <button className='bg-black/[0.6] border border-white text-xl desktop:text-[0.8rem] w-[107px] h-[38px] desktop:text-2xl'>
-          Vote Now
+        <button
+          onClick={onSubmit}
+          className={clsx(
+            'border border-white text-xl desktop:text-[0.8rem] w-[107px] h-[38px] desktop:text-2xl',
+            { 'bg-[#303030]/[0.6]': vote },
+            { 'bg-black/[0.6] ': !vote }
+          )}
+          disabled={!vote && !isSubmitted}
+        >
+          {isSubmitted ? 'Vote Again' : 'Vote Now'}
         </button>
       </div>
     </div>
