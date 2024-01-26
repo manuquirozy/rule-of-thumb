@@ -6,7 +6,7 @@ import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
 import { intervalToDuration } from 'date-fns';
 import clsx from 'clsx';
-import { LIST, INCREMENT } from '../constants';
+import { LIST, INCREMENT, POSITIVE, NEGATIVE } from '../constants';
 
 export default function VoteButtons({ celebrity }) {
   const {
@@ -31,23 +31,17 @@ export default function VoteButtons({ celebrity }) {
 
   const outputString = `${value} ${value === 1 ? greatestPeriod?.slice(0, -1) : greatestPeriod} ago in ${categoryCapitalized}`;
 
-  const handleClick = (event) => {
-    if (event.target.alt === selectedVote) {
+  const handleClick = (voteType) => {
+    if (voteType === selectedVote) {
       setSelectedVote(undefined);
     } else {
-      setSelectedVote(event.target.alt);
+      setSelectedVote(voteType);
     }
   };
 
   const onSubmit = () => {
-    let vote;
     if (!isSubmitted) {
-      if (selectedVote === 'thumbs up') {
-        vote = 'positive';
-      } else {
-        vote = 'negative';
-      }
-      dataDispatch({ type: INCREMENT, payload: { name, vote } });
+      dataDispatch({ type: INCREMENT, payload: { name, vote: selectedVote } });
       setSelectedVote(undefined);
     }
 
@@ -59,11 +53,11 @@ export default function VoteButtons({ celebrity }) {
       <span className='desktop:text-[12px] line-clamp-1'>{isSubmitted ? 'Thank you for voting!' : outputString}</span>
       <div className='flex items-center gap-[12px] desktop:gap-3'>
         <button
-          onClick={handleClick}
+          onClick={() => handleClick(POSITIVE)}
           className={clsx(
             'grid place-items-center w-[30px] h-[30px]',
             { 'desktop:w-[45px] desktop:h-[45px]': display === LIST },
-            { 'border border-white': selectedVote === 'thumbs up' },
+            { 'border border-white': selectedVote === POSITIVE },
             { invisible: isSubmitted }
           )}
           aria-label='thumbs up'
@@ -78,11 +72,11 @@ export default function VoteButtons({ celebrity }) {
           />
         </button>
         <button
-          onClick={handleClick}
+          onClick={() => handleClick(NEGATIVE)}
           className={clsx(
             'grid place-items-center w-[30px] h-[30px]',
             { 'desktop:w-[45px] desktop:h-[45px]': display === LIST },
-            { 'border border-white': selectedVote === 'thumbs down' },
+            { 'border border-white': selectedVote === NEGATIVE },
             { invisible: isSubmitted }
           )}
           aria-label='thumbs down'

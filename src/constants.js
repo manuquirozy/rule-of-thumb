@@ -5,3 +5,5 @@ export const REPLACE = 'REPLACE';
 export const DATA = 'data';
 export const UPDATE = 'UPDATE';
 export const DISPLAY = 'display';
+export const POSITIVE = 'positive';
+export const NEGATIVE = 'negative';

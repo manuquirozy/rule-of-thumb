@@ -1,36 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { DisplayContext } from '../context/display.context';
 import { DataContext } from '../context/data.context';
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
+import useResponsiveDisplay from '../hooks/useResponsiveDisplay';
 import CelebrityCard from '../components/CelebrityCard';
 import Dropdown from '../components/Dropdown';
-import { GRID, UPDATE } from '../constants';
 
 export default function Home() {
-  const { dispatch: displayDispatch } = useContext(DisplayContext);
-
   const {
     state: { data },
   } = useContext(DataContext);
 
-  const [isMobile, setIsMobile] = useState(true);
-
-  const handleResize = () => {
-    if (window.innerWidth < 768) {
-      setIsMobile(true);
-      displayDispatch({ type: UPDATE, payload: GRID });
-    } else {
-      setIsMobile(false);
-    }
-  };
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isMobile = useResponsiveDisplay();
 
   return (
     <div>
