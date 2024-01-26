@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { DisplayContext } from '../context/display.context';
+import { useState, useContext } from 'react';
 import Image from 'next/image';
 import triangleIcon from '/public/img/triangle.svg';
 
-export default function Dropdown({ toggleDisplay, display }) {
+export default function Dropdown() {
+  const {
+    state: { display },
+    dispatch,
+  } = useContext(DisplayContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => {
@@ -10,7 +15,8 @@ export default function Dropdown({ toggleDisplay, display }) {
   };
 
   const handleSelect = (event) => {
-    toggleDisplay(event.target.innerHTML);
+    dispatch({ type: 'TOGGLE', payload: event.target.innerHTML });
+    localStorage.setItem('display', JSON.stringify(event.target.innerHTML));
     toggle();
   };
 

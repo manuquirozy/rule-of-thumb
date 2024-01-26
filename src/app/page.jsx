@@ -1,19 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
-import { useState, useEffect } from 'react';
+import { DisplayContext } from '../context/display.context';
+import { useState, useEffect, useContext } from 'react';
 import CelebrityCard from '../components/CelebrityCard';
 import initialData from '../../public/data.json';
 import Dropdown from '../components/Dropdown';
 
 export default function Home() {
+  const {
+    state: { display },
+    dispatch: displayDispatch,
+  } = useContext(DisplayContext);
   const [celebrityArray, setCelebrityArray] = useState([]);
-  const [display, setDisplay] = useState('List');
   const [isMobile, setIsMobile] = useState(true);
 
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
-      setDisplay('Grid');
+      displayDispatch({ type: 'TOGGLE', payload: 'Grid' });
     } else {
       setIsMobile(false);
     }
@@ -25,11 +30,6 @@ export default function Home() {
     celebrityArrayCopy[celebrityIndex] = updatedCelebrity;
     setCelebrityArray(celebrityArrayCopy);
     localStorage.setItem('data', JSON.stringify(celebrityArrayCopy));
-  };
-
-  const updateDisplay = (updatedDisplay) => {
-    setDisplay(updatedDisplay);
-    localStorage.setItem('display', JSON.stringify(updatedDisplay));
   };
 
   useEffect(() => {
@@ -44,9 +44,9 @@ export default function Home() {
   useEffect(() => {
     const displayData = JSON.parse(localStorage.getItem('display'));
     if (displayData) {
-      setDisplay(displayData);
+      displayDispatch({ type: 'TOGGLE', payload: displayData });
     } else {
-      localStorage.setItem('display', JSON.stringify('Grid'));
+      localStorage.setItem('display', JSON.stringify(display));
     }
   }, []);
 
@@ -60,7 +60,7 @@ export default function Home() {
     <div>
       <div className='mb-8 flex justify-between items-center'>
         <div className='text-[2rem] font-light text-[#464646]'>Previous Rulings</div>
-        {!isMobile && <Dropdown toggleDisplay={updateDisplay} display={display} />}
+        {!isMobile && <Dropdown />}
       </div>
       <div className='flex flex-row flex-nowrap tablet:flex-wrap tablet:justify-center overflow-scroll gap-4 tablet:gap-6' id='card-list'>
         {celebrityArray.length > 0

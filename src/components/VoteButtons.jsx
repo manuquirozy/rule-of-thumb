@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { DisplayContext } from '../context/display.context';
+import { useState, useContext } from 'react';
 import Image from 'next/image';
 import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
 import { intervalToDuration } from 'date-fns';
 import clsx from 'clsx';
 
-export default function VoteButtons({ celebrity, display, updateVoteCount }) {
+export default function VoteButtons({ celebrity, updateVoteCount }) {
+  const { state: {display} } = useContext(DisplayContext);
   const { category, lastUpdated, name } = celebrity;
   const [vote, setVote] = useState(undefined);
   const [isSubmitted, setIsSubmitted] = useState(false);

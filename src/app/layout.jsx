@@ -1,3 +1,4 @@
+import { DisplayContextProvider } from '../context/display.context';
 import { Lato } from 'next/font/google';
 import Image from 'next/image';
 import searchIcon from '../../public/img/search.svg';
@@ -14,9 +15,7 @@ export const metadata = {
   title: 'Rule of Thumb',
 };
 
-export default function RootLayout({
-  children,
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body className={lato.className}>
@@ -124,7 +123,9 @@ export default function RootLayout({
               </svg>
             </button>
           </aside>
-          <main role='main'>{children}</main>
+          <main role='main'>
+            <DisplayContextProvider>{children}</DisplayContextProvider>
+          </main>
           <aside className='banner banner-bottom' role='doc-tip' aria-label='Submit a name'>
             <Image className='banner__background' src='/img/bg-people.png' alt='' width={200} height={200} role='none' />
             <div className='banner__left'>

@@ -1,9 +1,15 @@
+import { DisplayContext } from '../context/display.context';
+import { useContext } from 'react';
 import Image from 'next/image';
 import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
 import clsx from 'clsx';
 
-export default function Gauge({ votes, display }) {
+export default function Gauge({ votes }) {
+  const {
+    state: { display },
+  } = useContext(DisplayContext);
+
   const totalVotes = votes.positive + votes.negative;
   const positivePercentage = ((votes.positive / totalVotes) * 100).toFixed(1);
   const negativePercentage = ((votes.negative / totalVotes) * 100).toFixed(1);

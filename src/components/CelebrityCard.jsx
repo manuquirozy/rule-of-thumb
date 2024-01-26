@@ -1,3 +1,5 @@
+import { DisplayContext } from '../context/display.context';
+import { useContext } from 'react';
 import Image from 'next/image';
 import thumbsUpIcon from '/public/img/thumbs-up.svg';
 import thumbsDownIcon from '/public/img/thumbs-down.svg';
@@ -5,7 +7,11 @@ import Gauge from './Gauge';
 import clsx from 'clsx';
 import VoteButtons from './VoteButtons';
 
-export default function CelebrityCard({ celebrity, display, updateVoteCount }) {
+export default function CelebrityCard({ celebrity, updateVoteCount }) {
+  const {
+    state: { display },
+  } = useContext(DisplayContext);
+
   return (
     <div
       className={clsx(
