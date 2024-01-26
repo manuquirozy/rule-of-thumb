@@ -2,53 +2,29 @@
 'use client';
 
 import { DisplayContext } from '../context/display.context';
+import { DataContext } from '../context/data.context';
 import { useState, useEffect, useContext } from 'react';
 import CelebrityCard from '../components/CelebrityCard';
-import initialData from '../../public/data.json';
 import Dropdown from '../components/Dropdown';
+import { GRID, UPDATE } from '../constants';
 
 export default function Home() {
+  const { dispatch: displayDispatch } = useContext(DisplayContext);
+
   const {
-    state: { display },
-    dispatch: displayDispatch,
-  } = useContext(DisplayContext);
-  const [celebrityArray, setCelebrityArray] = useState([]);
+    state: { data },
+  } = useContext(DataContext);
+
   const [isMobile, setIsMobile] = useState(true);
 
   const handleResize = () => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
-      displayDispatch({ type: 'TOGGLE', payload: 'Grid' });
+      displayDispatch({ type: UPDATE, payload: GRID });
     } else {
       setIsMobile(false);
     }
   };
-
-  const updateVoteCount = (updatedCelebrity) => {
-    const celebrityArrayCopy = [...celebrityArray];
-    const celebrityIndex = celebrityArrayCopy.findIndex((element) => element.name === updatedCelebrity.name);
-    celebrityArrayCopy[celebrityIndex] = updatedCelebrity;
-    setCelebrityArray(celebrityArrayCopy);
-    localStorage.setItem('data', JSON.stringify(celebrityArrayCopy));
-  };
-
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('data'));
-    if (data) {
-      setCelebrityArray(data);
-    } else {
-      localStorage.setItem('data', JSON.stringify(initialData.data));
-    }
-  }, []);
-
-  useEffect(() => {
-    const displayData = JSON.parse(localStorage.getItem('display'));
-    if (displayData) {
-      displayDispatch({ type: 'TOGGLE', payload: displayData });
-    } else {
-      localStorage.setItem('display', JSON.stringify(display));
-    }
-  }, []);
 
   useEffect(() => {
     handleResize();
@@ -63,11 +39,7 @@ export default function Home() {
         {!isMobile && <Dropdown />}
       </div>
       <div className='flex flex-row flex-nowrap tablet:flex-wrap tablet:justify-center overflow-scroll gap-4 tablet:gap-6' id='card-list'>
-        {celebrityArray.length > 0
-          ? celebrityArray.map((celebrity) => (
-              <CelebrityCard celebrity={celebrity} display={display} updateVoteCount={updateVoteCount} key={celebrity.name} />
-            ))
-          : 'Loading...'}
+        {data.length > 0 ? data.map((celebrity) => <CelebrityCard celebrity={celebrity} key={celebrity.name} />) : 'Loading...'}
       </div>
     </div>
   );
